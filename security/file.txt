@@ -1,0 +1,8 @@
+/Users/yue/Applications/anaconda3/bin/python /Users/yue/Documents/project/hkust-assignments/security/frequency.py
+Traceback (most recent call last):
+  File "/Users/yue/Documents/project/hkust-assignments/security/frequency.py", line 65, in <module>
+    TEXT = file_to_string()
+  File "/Users/yue/Documents/project/hkust-assignments/security/frequency.py", line 12, in file_to_string
+    f = open(file, "r")
+FileNotFoundError: [Errno 2] No such file or directory: '/Users/yue/Documents/project/hkust-assignments/security/file.txt'
+(base) 
