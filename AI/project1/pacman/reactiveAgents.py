@@ -76,6 +76,17 @@ class ECAgent(Agent):
         east_perceptron = self.generatePerceptron('east')
         south_perceptron = self.generatePerceptron('south')
         west_perceptron = self.generatePerceptron('west')
+        sense = state.getPacmanSensor()
+        if north_perceptron.score(sense) == 1:
+            return Directions.NORTH
+        elif east_perceptron.score(sense) == 1:
+            return Directions.EAST
+        elif south_perceptron.score(sense) == 1:
+            return Directions.SOUTH
+        elif west_perceptron.score(sense) == 1:
+            return Directions.WEST
+        else:
+            return Directions.NORTH
 
 
 class Model:
@@ -98,3 +109,6 @@ class Model:
                     wrong_count += 1
             if wrong_count == 0:
                 flag = True
+
+    def score(self, x_test):
+        return 1 if (np.dot(x_test, self.w) >= self.theta) else 0
