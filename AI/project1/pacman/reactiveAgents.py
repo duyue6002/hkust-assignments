@@ -17,6 +17,9 @@ from game import Actions
 import util
 import time
 import search
+import pandas as pd
+import numpy as np
+import os
 
 
 class NaiveAgent(Agent):
@@ -56,6 +59,42 @@ class PSAgent(Agent):
 class ECAgent(Agent):
     "An agent that follows the boundary using error-correction."
 
+    def generatePerceptron(self, ptype):
+        script_dir = os.path.dirname(__file__)
+        file_name = '../' + ptype + '.csv'
+        file_path = os.path.join(script_dir, file_name)
+        df = pd.read_csv(file_path, header=None)
+        data = np.array(df.iloc[:, :])
+        X_train, D_train = data[:, :-1], data[:, -1]
+        perceptron = Model(data)
+        perceptron.error_correction(X_train, D_train)
+        return perceptron
+
     def getAction(self, state):
         ''' Your code goes here! '''
-        return Directions.NORTH
+        north_perceptron = self.generatePerceptron('north')
+        east_perceptron = self.generatePerceptron('east')
+        south_perceptron = self.generatePerceptron('south')
+        west_perceptron = self.generatePerceptron('west')
+
+
+class Model:
+    def __init__(self, data):
+        self.w = np.zeros(len(data[0])-1, dtype=np.float32)
+        self.theta = 0
+        self.rate = 0.1
+
+    def error_correction(self, X_train, D_train):
+        flag = False
+        while not flag:
+            wrong_count = 0
+            for i in range(len(X_train)):
+                x = X_train[i]
+                d = D_train[i]
+                output = 1 if (np.dot(x, self.w) >= self.theta) else 0
+                if d != output:
+                    self.w = self.w + self.rate*np.dot(d - output, x)
+                    self.theta = self.theta + self.rate*(output - d)
+                    wrong_count += 1
+            if wrong_count == 0:
+                flag = True
