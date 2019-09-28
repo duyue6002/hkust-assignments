@@ -4,7 +4,7 @@
 # educational purposes provided that (1) you do not distribute or publish
 # solutions, (2) you retain this notice, and (3) you provide clear
 # attribution to UC Berkeley, including a link to http://ai.berkeley.edu.
-# 
+#
 # Attribution Information: The Pacman AI projects were developed at UC Berkeley.
 # The core projects and autograders were primarily created by John DeNero
 # (denero@cs.berkeley.edu) and Dan Klein (klein@cs.berkeley.edu).
@@ -18,6 +18,7 @@ import util
 import time
 import search
 
+
 class NaiveAgent(Agent):
     "An agent that goes West until it can't."
 
@@ -29,12 +30,25 @@ class NaiveAgent(Agent):
         else:
             return Directions.WEST
 
+
 class PSAgent(Agent):
     "An agent that follows the boundary using production system."
 
     def getAction(self, state):
         ''' Your code goes here! '''
-        return Directions.NORTH
+        sense = state.getPacmanSensor()
+        toEast = sense[1] and sense[2] and (not sense[3]) and (not sense[4])
+        toSouth = sense[3] and sense[4] and (not sense[5]) and (not sense[6])
+        toWest = sense[5] and sense[6] and (not sense[7]) and (not sense[0])
+        if toEast:
+            return Directions.EAST
+        elif toSouth:
+            return Directions.SOUTH
+        elif toWest:
+            return Directions.WEST
+        else:
+            return Directions.NORTH
+
 
 class ECAgent(Agent):
     "An agent that follows the boundary using error-correction."
