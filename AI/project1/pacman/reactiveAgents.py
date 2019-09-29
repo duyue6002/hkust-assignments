@@ -65,6 +65,12 @@ class PSAgent(Agent):
 class ECAgent(Agent):
     "An agent that follows the boundary using error-correction."
 
+    def __init__(self):
+        self.north_perceptron = self.generatePerceptron('north')
+        self.east_perceptron = self.generatePerceptron('east')
+        self.south_perceptron = self.generatePerceptron('south')
+        self.west_perceptron = self.generatePerceptron('west')
+
     def generatePerceptron(self, ptype):
         script_dir = os.path.dirname(__file__)
         file_name = '../' + ptype + '.csv'
@@ -78,22 +84,14 @@ class ECAgent(Agent):
 
     def getAction(self, state):
         ''' Your code goes here! '''
-        north_perceptron = self.generatePerceptron('north')
-        east_perceptron = self.generatePerceptron('east')
-        south_perceptron = self.generatePerceptron('south')
-        west_perceptron = self.generatePerceptron('west')
-        # print(north_perceptron.w, north_perceptron.theta)
-        # print(east_perceptron.w, east_perceptron.theta)
-        # print(south_perceptron.w, south_perceptron.theta)
-        # print(west_perceptron.w, west_perceptron.theta)
         sense = state.getPacmanSensor()
-        if north_perceptron.score(sense) == 1:
+        if self.north_perceptron.score(sense) == 1:
             return Directions.NORTH
-        elif east_perceptron.score(sense) == 1:
+        elif self.east_perceptron.score(sense) == 1:
             return Directions.EAST
-        elif south_perceptron.score(sense) == 1:
+        elif self.south_perceptron.score(sense) == 1:
             return Directions.SOUTH
-        elif west_perceptron.score(sense) == 1:
+        elif self.west_perceptron.score(sense) == 1:
             return Directions.WEST
         else:
             return Directions.NORTH
