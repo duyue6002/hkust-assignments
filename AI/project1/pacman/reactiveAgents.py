@@ -76,6 +76,10 @@ class ECAgent(Agent):
         east_perceptron = self.generatePerceptron('east')
         south_perceptron = self.generatePerceptron('south')
         west_perceptron = self.generatePerceptron('west')
+        # print(north_perceptron.w, north_perceptron.theta)
+        # print(east_perceptron.w, east_perceptron.theta)
+        # print(south_perceptron.w, south_perceptron.theta)
+        # print(west_perceptron.w, west_perceptron.theta)
         sense = state.getPacmanSensor()
         if north_perceptron.score(sense) == 1:
             return Directions.NORTH
