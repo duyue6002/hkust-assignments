@@ -40,20 +40,26 @@ class PSAgent(Agent):
     def getAction(self, state):
         ''' Your code goes here! '''
         sense = state.getPacmanSensor()
-        toNorth = sense[0] and sense[7] and (not sense[1]) and (not sense[2])
-        toEast = sense[1] and sense[2] and (not sense[3]) and (not sense[4])
-        toSouth = sense[3] and sense[4] and (not sense[5]) and (not sense[6])
-        toWest = sense[5] and sense[6] and (not sense[7]) and (not sense[0])
+        x = [0, 0, 0, 0]
+        x[0] = sense[1] or sense[2]
+        x[1] = sense[3] or sense[4]
+        x[2] = sense[5] or sense[6]
+        x[3] = sense[0] or sense[7]
+        toNorth = x[3] and (not x[0]) or (
+            not x[0] and not x[1] and not x[2] and not x[3])
+        toEast = x[0] and (not x[1])
+        toSouth = x[1] and (not x[2])
+        toWest = x[2] and (not x[3])
         if toNorth:
             return Directions.NORTH
-        elif toEast:
-            return Directions.EAST
         elif toSouth:
             return Directions.SOUTH
+        elif toEast:
+            return Directions.EAST
         elif toWest:
             return Directions.WEST
         else:
-            return Directions.NORTH
+            return Directions.STOP
 
 
 class ECAgent(Agent):
