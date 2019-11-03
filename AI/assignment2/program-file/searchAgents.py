@@ -360,7 +360,8 @@ class CornersProblem(search.SearchProblem):
                     visited = visited_corners + [nextState]
                     successors.append(((nextState, visited), action, cost))
                 else:
-                    successors.append(((nextState, visited_corners), action, cost))
+                    successors.append(
+                        ((nextState, visited_corners), action, cost))
 
         self._expanded += 1  # DO NOT CHANGE
         return successors
@@ -399,7 +400,23 @@ def cornersHeuristic(state, problem):
     walls = problem.walls
 
     "*** YOUR CODE HERE ***"
-    return 0  # Default to trivial solution
+    position = state[0]
+    visited_corners = state[1]
+    unvisited_corners = []
+    heuristic = 0
+
+    for corner in corners:
+        if corner not in visited_corners:
+            unvisited_corners.append(corner)
+
+    while len(unvisited_corners) != 0:
+        distance, corner = min([(util.manhattanDistance(position, corner), corner)
+                                for corner in unvisited_corners])
+        heuristic += distance
+        position = corner
+        unvisited_corners.remove(corner)
+
+    return heuristic  # Default to trivial solution
 
 
 class AStarCornersAgent(SearchAgent):
