@@ -162,7 +162,6 @@ def aStarSearch(problem, heuristic=nullHeuristic):
             return actions
 
         for successor, action, stepCost in problem.getSuccessors(state):
-            print(successor, action)
             if successor not in G:
                 G.append(successor)
                 OPEN.append(
