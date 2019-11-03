@@ -91,7 +91,6 @@ def depthFirstSearch(problem):
     "*** YOUR CODE HERE ***"
     stack = util.Stack()
     stack.push((problem.getStartState(), []))
-    tree = []
     visited = []
 
     while not stack.isEmpty():
@@ -105,8 +104,8 @@ def depthFirstSearch(problem):
             for successor, action, stepCost in problem.getSuccessors(state):
                 if successor not in visited:
                     stack.push((successor, actions + [action]))
-    util.raiseNotDefined()
 
+    return []
 
 def breadthFirstSearch(problem):
     """Search the shallowest nodes in the search tree first."""
@@ -150,26 +149,24 @@ def nullHeuristic(state, problem=None):
 def aStarSearch(problem, heuristic=nullHeuristic):
     """Search the node that has the lowest combined cost and heuristic first."""
     "*** YOUR CODE HERE ***"
-    OPEN = []
-    OPEN.append((problem.getStartState(), [], heuristic(
-        problem.getStartState(), problem)))
-    G = []
+    OPEN = util.PriorityQueue()
+    OPEN.push((problem.getStartState(), []), heuristic(
+        problem.getStartState(), problem))
+    visited = []
 
-    while not len(OPEN) == 0:
-        state, actions, distance = OPEN.pop()
+    while OPEN:
+        state, actions = OPEN.pop()
 
-        if problem.isGoalState(state):
-            return actions
+        if not state in visited:
+            visited.append(state)
+            if problem.isGoalState(state):
+                return actions
+            for successor, action, stepCost in problem.getSuccessors(state):
+                new_cost = problem.getCostOfActions(
+                    actions + [action]) + heuristic(successor, problem)
+                OPEN.push((successor, actions + [action]), new_cost)
 
-        for successor, action, stepCost in problem.getSuccessors(state):
-            if successor not in G:
-                G.append(successor)
-                OPEN.append(
-                    (successor, actions + [action], heuristic(successor, problem)))
-
-        OPEN = sorted(OPEN, key=lambda x: x[2], reverse=True)
-
-    util.raiseNotDefined()
+    return []
 
 
 # Abbreviations
